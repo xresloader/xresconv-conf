@@ -15,6 +15,15 @@
         <rename desc="重命名规则，-n选项">/(?i)\.bin$/\.json/</rename>
     </global>
 
+    <gui>
+        <set_name desc="这个脚本用于修改树形节点的显示数据,便于策划核对具体的表名">
+            (function(item_data){
+                item_data.name += " (" + item_data.file.match(/([^.]+)\.\w+$/)[1] + ")"
+                return item_data;
+            })
+        </set_name>
+    </gui>
+    
     <groups desc="分组信息">
         <group id="client" name="客户端"></group>
         <group id="server" name="服务器"></group>
