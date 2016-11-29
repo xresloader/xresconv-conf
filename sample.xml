@@ -14,6 +14,9 @@
         <data_src_dir desc="数据源目录，-d选项"></data_src_dir>
 
         <rename desc="重命名规则，-n选项">/(?i)\.bin$/\.json/</rename>
+
+        <java_option desc="java选项-最大内存限制2GB">-Xmx2048m</java_option>
+        <java_option desc="java选项-客户端模式">-client</java_option>
     </global>
 
     <gui>
