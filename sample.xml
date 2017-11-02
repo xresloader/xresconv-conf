@@ -4,7 +4,7 @@
     <!-- <include desc="可以包含其他文件配置，然后本文件里的配置将会覆盖或合并配置，相对于当前xml的目录">sample.xml</include> -->
     <global>
         <work_dir desc="工作目录，相对于当前xml的目录">../xresloader/sample</work_dir>
-        <xresloader_path desc="xresloader地址，相对于当前xml的目录">../target/xresloader-1.3.0.0.jar</xresloader_path>
+        <xresloader_path desc="xresloader地址，相对于当前xml的目录">../target/xresloader-1.4.0.jar</xresloader_path>
 
         <proto desc="协议类型，-p选项">protobuf</proto>
         <output_type desc="输出类型，-t选项">json</output_type>
@@ -12,6 +12,7 @@
 
         <output_dir desc="输出目录，-o选项"></output_dir>
         <data_src_dir desc="数据源目录，-d选项"></data_src_dir>
+        <data_version desc="数据版本号，留空则自动生成">1.0.0.0</data_version>
 
         <rename desc="重命名规则，-n选项">/(?i)\.bin$/\.json/</rename>
 
