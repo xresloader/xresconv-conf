@@ -22,17 +22,6 @@
         <default_scheme name="KeyRow" desc="默认scheme模式参数-Key行号">2</default_scheme>
         <default_scheme name="MacroSource" desc="默认scheme模式参数-Key行号">资源转换示例.xlsx|macro|2,1</default_scheme>
     </global>
-
-    <gui>
-        <set_name desc="这个脚本用于修改树形节点的显示数据,便于策划核对具体的表名">
-            (function(item_data){
-                if (item_data.file) {
-                    item_data.name += " (" + item_data.file.match(/([^.]+)\.\w+$/)[1] + ")"
-                }
-                return item_data;
-            })
-        </set_name>
-    </gui>
     
     <groups desc="分组信息">
         <group id="client" name="客户端"></group>
@@ -57,4 +46,46 @@
             <scheme name="OutputFile" desc="输出文件名">arr_in_arr_cfg.bin</scheme>
         </item>
     </list>
+
+    <gui>
+        <set_name desc="这个脚本用于修改树形节点的显示数据,便于策划核对具体的表名">
+            if (item_data.file) {
+                item_data.name += " (" + item_data.file.match(/([^.]+)\.\w+$/)[1] + ")"
+            }
+            return item_data;
+        </set_name>
+        <on_before_convert type="text/javascript" timeout="15000" description="事件执行结束必须调用resolve(value)或reject(reason)函数，以触发进行下一步">
+            // 这里可以执行nodejs代码，比如下面是Windows平台执行 echo work_dir
+            var os = require("os");
+            var spawn = require("child_process").spawn;
+            if (os.type().substr(0, 7).toLowerCase() == "windows") {
+                var exec = spawn("cmd.exe", ["/c", "echo " + work_dir], {
+                    cwd: work_dir,
+                    encoding: 'utf-8'
+                });
+                exec.stdout.on("data", function(data) {
+                    log_info(data);
+                });
+                exec.stderr.on("data", function(data) {
+                    log_error(data);
+                });
+                exec.on("error", function(data) {
+                    log_error(data.toString());
+                    reject("执行失败" + data.toString());
+                });
+                exec.on("exit", function(code) {
+                    if (code === 0) {
+                        resolve();
+                    } else {
+                        reject("执行失败");
+                    }
+                });
+            } else {
+                resolve();
+            }
+        </on_before_convert>
+        <on_after_convert type="text/javascript" timeout="60000" description="事件执行结束必须调用resolve(value)或reject(reason)函数，以触发进行下一步">
+            // 同上
+        </on_after_convert>
+    </gui>
 </root>
