@@ -4,17 +4,18 @@
     <!-- <include desc="可以包含其他文件配置，然后本文件里的配置将会覆盖或合并配置，相对于当前xml的目录">sample.xml</include> -->
     <global>
         <work_dir desc="工作目录，相对于当前xml的目录">../xresloader/sample</work_dir>
-        <xresloader_path desc="xresloader地址，相对于当前xml的目录">../target/xresloader-1.4.1.jar</xresloader_path>
+        <xresloader_path desc="xresloader地址，相对于当前xml的目录">../target/xresloader-2.5.0.jar</xresloader_path>
 
         <proto desc="协议类型，-p选项">protobuf</proto>
-        <output_type desc="输出类型，-t选项">json</output_type>
+        <output_type desc="输出类型，-t选项，支持多个同时配置多种输出">bin</output_type>
+        <output_type desc="多种输出时可以额外定义某个节点的重命名规则" rename="/(?i)\.bin$/\.json/">json</output_type>
         <proto_file desc="协议描述文件，-f选项">proto_v3/kind.pb</proto_file>
 
         <output_dir desc="输出目录，-o选项"></output_dir>
         <data_src_dir desc="数据源目录，-d选项"></data_src_dir>
         <data_version desc="数据版本号，留空则自动生成">1.0.0.0</data_version>
 
-        <rename desc="重命名规则，-n选项">/(?i)\.bin$/\.json/</rename>
+        <rename desc="重命名规则，正则表达式：/搜索模式/替换内容/，对应xresloader的-n选项, 如果在output_type里设置了rename，以output_type里的rename为准，否则使用这里的全局配置" placeholder="/(?i)\.bin$/\.json/"></rename>
 
         <java_option desc="java选项-最大内存限制2GB">-Xmx2048m</java_option>
         <java_option desc="java选项-客户端模式">-client</java_option>
@@ -52,7 +53,6 @@
             if (item_data.file) {
                 item_data.name += " (" + item_data.file.match(/([^.]+)\.\w+$/)[1] + ")"
             }
-            return item_data;
         </set_name>
         <on_before_convert type="text/javascript" timeout="15000" description="事件执行结束必须调用resolve(value)或reject(reason)函数，以触发进行下一步">
             // 这里可以执行nodejs代码，比如下面是Windows平台执行 echo work_dir
@@ -86,6 +86,7 @@
         </on_before_convert>
         <on_after_convert type="text/javascript" timeout="60000" description="事件执行结束必须调用resolve(value)或reject(reason)函数，以触发进行下一步">
             // 同上
+            resolve();
         </on_after_convert>
     </gui>
 </root>
