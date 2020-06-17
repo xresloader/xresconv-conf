@@ -4,11 +4,13 @@
     <!-- <include desc="可以包含其他文件配置，然后本文件里的配置将会覆盖或合并配置，相对于当前xml的目录">sample.xml</include> -->
     <global>
         <work_dir desc="工作目录，相对于当前xml的目录">../xresloader/sample</work_dir>
-        <xresloader_path desc="xresloader地址，相对于当前xml的目录">../target/xresloader-2.7.3.jar</xresloader_path>
+        <xresloader_path desc="xresloader地址，相对于当前xml的目录">../target/xresloader-2.8.1.jar</xresloader_path>
 
         <proto desc="协议类型，-p选项">protobuf</proto>
         <output_type desc="输出类型，-t选项，支持多个同时配置多种输出">bin</output_type>
         <output_type desc="多种输出时可以额外定义某个节点的重命名规则" rename="/(?i)\.bin$/\.json/">json</output_type>
+        <output_type desc="可以通过指定class来限制输出的规则" rename="/(?i)\.bin$/\.csv/" class="client" >ue-csv</output_type>
+        <!-- output_type 里的class标签对应下面item里的class标签，均可配置多个，多个用空格隔开，任意一个class匹配都会启用这个输出 -->
         <proto_file desc="协议描述文件，-f选项">proto_v3/kind.pb</proto_file>
 
         <output_dir desc="输出目录，-o选项"></output_dir>
@@ -37,8 +39,8 @@
     </category>
 
     <list>
-        <item file="资源转换示例.xlsx" scheme="scheme_kind" name="人物表" cat="kind" class="client server"></item>
-        <item file="资源转换示例.xlsx" scheme="scheme_upgrade" name="升级表" cat="kind" class="client server">
+        <item file="资源转换示例.xlsx" scheme="scheme_kind" name="人物表" cat="kind" class="server"></item>
+        <item file="资源转换示例.xlsx" scheme="scheme_upgrade" name="升级表" cat="kind" class="server">
             <option desc="自定义选项" name="移除空列表项">--disable-empty-list</option>
         </item>
         <item name="嵌套数组测试" cat="test" class="client server">
@@ -88,6 +90,7 @@
         </on_before_convert>
         <on_after_convert type="text/javascript" timeout="60000" description="事件执行结束必须调用resolve(value)或reject(reason)函数，以触发进行下一步">
             // 同上
+            alert_warning("Test Error");
             resolve();
         </on_after_convert>
     </gui>
