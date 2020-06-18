@@ -90,7 +90,7 @@
         </on_before_convert>
         <on_after_convert type="text/javascript" timeout="60000" description="事件执行结束必须调用resolve(value)或reject(reason)函数，以触发进行下一步">
             // 同上
-            alert_warning("Test Error");
+            alert_warning("自定义转表完成后事件，可以执行任意nodejs脚本");
             resolve();
         </on_after_convert>
     </gui>
