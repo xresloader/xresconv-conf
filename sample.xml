@@ -94,9 +94,39 @@
             alert_warning("自定义转表完成后事件，可以执行任意nodejs脚本");
             resolve();
         </on_after_convert>
+        <script 
+            name="delaycall" 
+            type="text/javascript">
+            if (data.running) {
+                reject("上一次未完成");
+            } else {
+                data.running = true;
+                var left_times = 5;
+                function counter() {
+                    if (left_times > 0) {
+                        log_notice(`定时器计数: ${left_times}`);
+                        left_times -= 1;
+
+                        require("timers").setTimeout(function(){
+                            counter();
+                        }, 1000);
+                        return;
+                    }
+                    log_notice("定时器结束");
+                    resolve();
+                }
+                counter();
+            }
+        </script>
+
         <script name="自定义脚本" type="text/javascript">
             // 同上
+            data.call_times = (data.call_times || 0) + 1;
             alert_warning("自定义脚本，可用于自定义按钮");
+            log_notice(`自定义脚本，可用于自定义按钮 - notice日志(${data.call_times})`);
+            log_warning("自定义脚本，可用于自定义按钮 - warning日志");
+            // resolve();
+            data.running = false;
             resolve();
         </script>
     </gui>
